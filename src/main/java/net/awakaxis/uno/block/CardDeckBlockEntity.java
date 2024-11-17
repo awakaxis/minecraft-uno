@@ -1,0 +1,28 @@
+package net.awakaxis.uno.block;
+
+import net.awakaxis.uno.UNOBlockEntities;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
+
+public class CardDeckBlockEntity extends BlockEntity {
+
+    public CardDeckBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+        super(blockEntityType, blockPos, blockState);
+    }
+
+    public CardDeckBlockEntity(BlockPos blockPos, BlockState blockState) {
+        this(UNOBlockEntities.CARD_DECK_BLOCK_ENTITY_TYPE, blockPos, blockState);
+    }
+
+    public static void tick(Level level, BlockPos blockPos, BlockState blockState, CardDeckBlockEntity cardDeckBlockEntity) {
+//        level.explode(null, cardDeckBlockEntity.getBlockPos().getX(), cardDeckBlockEntity.getBlockPos().getY(), cardDeckBlockEntity.getBlockPos().getZ(),
+//                4, Level.ExplosionInteraction.NONE);
+//        level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+    }
+}
+

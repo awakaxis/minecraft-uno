@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "uno",
+	"version": "${version}",
+	"name": "UNO",
+	"description": "UNO in minecraft",
+	"authors": [
+		"awakaxis"
+	],
+	"contact": {
+		"sources": "none (yet)"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/uno/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.awakaxis.uno.UNO"
+		],
+		"client": [
+			"net.awakaxis.uno.client.UNOClient"
+		],
+		"fabric-datagen": [
+			"net.awakaxis.uno.UNODataGenerator"
+		]
+	},
+	"mixins": [
+		"uno.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

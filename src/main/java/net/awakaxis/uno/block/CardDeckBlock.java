@@ -3,6 +3,7 @@ package net.awakaxis.uno.block;
 import net.awakaxis.uno.UNOBlockEntities;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -13,12 +14,22 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CardDeckBlock extends BaseEntityBlock {
 
+    private static final VoxelShape DEFAULT_COLLISION = box(6, 0, 5, 10, 3, 11);
+
     public CardDeckBlock() {
-        super(BlockBehaviour.Properties.copy(Blocks.SUGAR_CANE));
+        super(BlockBehaviour.Properties.copy(Blocks.STONE));
+    }
+
+    @Override
+    public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+        return DEFAULT_COLLISION;
     }
 
     @Override
@@ -32,7 +43,7 @@ public class CardDeckBlock extends BaseEntityBlock {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState blockState) {
+    public @NotNull RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 }

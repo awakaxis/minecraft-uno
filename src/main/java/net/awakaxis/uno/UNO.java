@@ -4,7 +4,6 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTabs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +22,8 @@ public class UNO implements ModInitializer {
 		UNOItems.register();
 
 		ItemGroupEvents.modifyEntriesEvent(UNOItems.UNO_ITEM_GROUP_KEY).register(itemGroup -> {
-			itemGroup.accept(UNOBlocks.CARD_DECK_BLOCK.asItem());
+			itemGroup.accept(UNOBlocks.CARD_DECK.asItem());
+			itemGroup.accept(UNOItems.UNO_CARD);
 		});
 
 		LOGGER.info("Hello Queers!");

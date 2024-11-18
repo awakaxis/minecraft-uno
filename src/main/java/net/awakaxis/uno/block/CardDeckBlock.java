@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -23,13 +24,18 @@ public class CardDeckBlock extends BaseEntityBlock {
 
     private static final VoxelShape DEFAULT_COLLISION = box(6, 0, 5, 10, 3, 11);
 
-    public CardDeckBlock() {
-        super(BlockBehaviour.Properties.copy(Blocks.STONE));
+    public CardDeckBlock(BlockBehaviour.Properties properties) {
+        super(properties);
     }
 
     @Override
     public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         return DEFAULT_COLLISION;
+    }
+
+    @Override
+    public boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        return !levelReader.isEmptyBlock(blockPos.below());
     }
 
     @Override

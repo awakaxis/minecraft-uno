@@ -7,11 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-
-import javax.smartcardio.Card;
+import net.minecraft.world.level.block.Blocks;z
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class UNOBlocks {
-    public static final Block CARD_DECK_BLOCK = registerWithItem(new CardDeckBlock(), "card_deck", new Item.Properties().stacksTo(1));
+    public static final Block CARD_DECK = registerWithItem(new CardDeckBlock(BlockBehaviour.Properties.copy(Blocks.STONE)), "card_deck", new Item.Properties().stacksTo(1));
 
     private static Block registerWithItem(Block block, String id, Item.Properties properties) {
         ResourceLocation resourceLocation = UNO.id(id);

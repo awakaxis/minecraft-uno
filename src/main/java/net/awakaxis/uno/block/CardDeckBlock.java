@@ -31,8 +31,15 @@ public class CardDeckBlock extends BaseEntityBlock {
     }
 
     @Override
+    public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
+        return !this.canSurvive(blockState, levelAccessor, blockPos)
+                ? Blocks.AIR.defaultBlockState()
+                : super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+    }
+
+    @Override
     public boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
-        return !levelReader.isEmptyBlock(blockPos.below());
+        return levelReader.getBlockState(blockPos.below()).isFaceSturdy(levelReader, blockPos.below(), Direction.UP);
     }
 
     @Override

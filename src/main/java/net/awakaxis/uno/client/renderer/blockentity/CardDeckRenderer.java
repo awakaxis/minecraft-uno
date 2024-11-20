@@ -19,7 +19,6 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
     public static final ResourceLocation CARD_DECK_TEXTURE_SIDE = UNO.id("textures/entity/card_deck_side.png");
     public static int CARD_COUNT = 112;
     private static final float CARD_THICKNESS = 0.007f;
-    // the model looks stupid if there are too many visible cards
 
     public CardDeckRenderer(BlockEntityRendererProvider.Context context) {
 
@@ -31,6 +30,11 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
 
     @Override
     public void render(CardDeckBlockEntity blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
+
+        if (CARD_COUNT <= 0) {
+            return;
+        }
+
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutout(CARD_DECK_TEXTURE));
         poseStack.pushPose();
 

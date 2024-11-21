@@ -15,7 +15,7 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity> {
-    public static final ResourceLocation CARD_DECK_TEXTURE = UNO.id("textures/entity/card_deck.png");
+    public static final ResourceLocation CARD_DECK_TEXTURE = UNO.id("textures/item/card_back.png");
     public static final ResourceLocation CARD_DECK_TEXTURE_SIDE = UNO.id("textures/entity/card_deck_side.png");
     public static int CARD_COUNT = 112;
     private static final float CARD_THICKNESS = 0.007f;

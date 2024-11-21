@@ -15,6 +15,84 @@
         "card_index": 1
       },
       "model": "uno:item/card_1"
+    },
+    {
+      "predicate": {
+        "card_index": 2
+      },
+      "model": "uno:item/card_2"
+    },
+    {
+      "predicate": {
+        "card_index": 3
+      },
+      "model": "uno:item/card_3"
+    },
+    {
+      "predicate": {
+        "card_index": 4
+      },
+      "model": "uno:item/card_4"
+    },
+    {
+      "predicate": {
+        "card_index": 5
+      },
+      "model": "uno:item/card_5"
+    },
+    {
+      "predicate": {
+        "card_index": 6
+      },
+      "model": "uno:item/card_6"
+    },
+    {
+      "predicate": {
+        "card_index": 7
+      },
+      "model": "uno:item/card_7"
+    },
+    {
+      "predicate": {
+        "card_index": 8
+      },
+      "model": "uno:item/card_8"
+    },
+    {
+      "predicate": {
+        "card_index": 9
+      },
+      "model": "uno:item/card_9"
+    },
+    {
+      "predicate": {
+        "card_index": 10
+      },
+      "model": "uno:item/card_10"
+    },
+    {
+      "predicate": {
+        "card_index": 11
+      },
+      "model": "uno:item/card_11"
+    },
+    {
+      "predicate": {
+        "card_index": 12
+      },
+      "model": "uno:item/card_12"
+    },
+    {
+      "predicate": {
+        "card_index": 13
+      },
+      "model": "uno:item/card_13"
+    },
+    {
+      "predicate": {
+        "card_index": 14
+      },
+      "model": "uno:item/card_14"
     }
   ]
 }

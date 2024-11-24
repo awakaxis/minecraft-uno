@@ -9,6 +9,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class CardDeckBlockEntity extends BlockEntity {
 
+    // TODO: do something like EntityDataAccessor for this block entity somehow idk man
+
     public CardDeckBlockEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }

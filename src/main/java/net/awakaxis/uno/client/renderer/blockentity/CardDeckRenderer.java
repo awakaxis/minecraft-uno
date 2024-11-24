@@ -20,9 +20,7 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
     public static int CARD_COUNT = 112;
     private static final float CARD_THICKNESS = 0.007f;
 
-    public CardDeckRenderer(BlockEntityRendererProvider.Context context) {
-
-    }
+    public CardDeckRenderer(BlockEntityRendererProvider.Context context) {}
 
     private static float getHeight() {
         return CARD_THICKNESS * Math.round(CARD_COUNT / 10.0f) / 2.0f;
@@ -31,9 +29,7 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
     @Override
     public void render(CardDeckBlockEntity blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
 
-        if (CARD_COUNT <= 0) {
-            return;
-        }
+        if (CARD_COUNT <= 0) return;
 
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutout(CARD_DECK_TEXTURE));
         poseStack.pushPose();
@@ -96,8 +92,8 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
                 .endVertex();
     }
 
-    @Override
-    public boolean shouldRender(CardDeckBlockEntity blockEntity, Vec3 vec3) {
-        return true;
-    }
+//    @Override
+//    public boolean shouldRender(CardDeckBlockEntity blockEntity, Vec3 vec3) {
+//        return true;
+//    }
 }

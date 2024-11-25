@@ -10,26 +10,21 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity> {
     public static final ResourceLocation CARD_DECK_TEXTURE = UNO.id("textures/entity/card_deck.png");
     public static final ResourceLocation CARD_DECK_TEXTURE_SIDE = UNO.id("textures/entity/card_deck_side.png");
-    public static int CARD_COUNT = 112;
     private static final float CARD_THICKNESS = 0.007f;
 
     public CardDeckRenderer(BlockEntityRendererProvider.Context context) {}
 
-    private static float getHeight() {
-        return CARD_THICKNESS * Math.round(CARD_COUNT / 10.0f) / 2.0f;
-    }
-
     @Override
     public void render(CardDeckBlockEntity blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
+        if (blockEntity.getCardCount() <= 0) return;
 
-        if (CARD_COUNT <= 0) return;
+        float height = CARD_THICKNESS * Math.round(blockEntity.getCardCount() / 10.0f) / 2.0f;
 
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutout(CARD_DECK_TEXTURE));
         poseStack.pushPose();
@@ -41,42 +36,42 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
         Matrix3f normal = poseStack.last().normal();
 
         // top face
-        this.vertex(affine, normal, vertexConsumer, 0.375f, getHeight(), 0.312f, 0, 0, 0, 1, 0, i);
-        this.vertex(affine, normal, vertexConsumer, 0.375f, getHeight(), 0.687f, 0, 1, 0, 1, 0, i);
-        this.vertex(affine, normal, vertexConsumer, 0.625f, getHeight(), 0.687f, 1, 1, 0, 1, 0, i);
-        this.vertex(affine, normal, vertexConsumer, 0.625f, getHeight(), 0.312f, 1, 0, 0, 1, 0, i);
+        this.vertex(affine, normal, vertexConsumer, 0.375f, height, 0.312f, 0, 0, 0, 1, 0, i);
+        this.vertex(affine, normal, vertexConsumer, 0.375f, height, 0.687f, 0, 1, 0, 1, 0, i);
+        this.vertex(affine, normal, vertexConsumer, 0.625f, height, 0.687f, 1, 1, 0, 1, 0, i);
+        this.vertex(affine, normal, vertexConsumer, 0.625f, height, 0.312f, 1, 0, 0, 1, 0, i);
 
         vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutout(CARD_DECK_TEXTURE_SIDE));
 
         // round to x, x + 0.5, or x + 1 because the card side texture is actually two cards on top of each other, so the value needs to be in terms of 0.5
         // hawk tuah
-        final float VALUE = Math.round(CARD_COUNT / 10.0f) / 2.0f;
+        final float VALUE = Math.round(blockEntity.getCardCount() / 10.0f) / 2.0f;
         final float UV_NY = (int) VALUE < VALUE ? 0.5f : 0.0F;
         final float UV_PY = (int) VALUE < VALUE ? VALUE + 0.5f : VALUE;
 
         // northern face
-        this.vertex(affine, normal, vertexConsumer, 0.625f, getHeight(), 0.312f, 0, UV_NY, 0, 0, -1, i);
+        this.vertex(affine, normal, vertexConsumer, 0.625f, height, 0.312f, 0, UV_NY, 0, 0, -1, i);
         this.vertex(affine, normal, vertexConsumer, 0.625f, 0f, 0.312f, 0, UV_PY, 0, 0, -1, i);
         this.vertex(affine, normal, vertexConsumer, 0.375f, 0f, 0.312f, 1, UV_PY, 0, 0, -1, i);
-        this.vertex(affine, normal, vertexConsumer, 0.375f, getHeight(), 0.312f, 1, UV_NY, 0, 0, -1, i);
+        this.vertex(affine, normal, vertexConsumer, 0.375f, height, 0.312f, 1, UV_NY, 0, 0, -1, i);
 
         // eastern face
-        this.vertex(affine, normal, vertexConsumer, 0.625f, getHeight(), 0.687f, 0, UV_NY, 1, 0, 0, i);
+        this.vertex(affine, normal, vertexConsumer, 0.625f, height, 0.687f, 0, UV_NY, 1, 0, 0, i);
         this.vertex(affine, normal, vertexConsumer, 0.625f, 0, 0.687f, 0, UV_PY, 1, 0, 0, i);
         this.vertex(affine, normal, vertexConsumer, 0.625f, 0, 0.312f, 1, UV_PY, 1, 0, 0, i);
-        this.vertex(affine, normal, vertexConsumer, 0.625f, getHeight(), 0.312f, 1, UV_NY, 1, 0, 0, i);
+        this.vertex(affine, normal, vertexConsumer, 0.625f, height, 0.312f, 1, UV_NY, 1, 0, 0, i);
 
         // southern face
-        this.vertex(affine, normal, vertexConsumer, 0.375f, getHeight(), 0.687f, 0, UV_NY, 0, 0, 1, i);
+        this.vertex(affine, normal, vertexConsumer, 0.375f, height, 0.687f, 0, UV_NY, 0, 0, 1, i);
         this.vertex(affine, normal, vertexConsumer, 0.375f, 0, 0.687f, 0, UV_PY, 0, 0, 1, i);
         this.vertex(affine, normal, vertexConsumer, 0.625f, 0, 0.687f, 1, UV_PY, 0, 0, 1, i);
-        this.vertex(affine, normal, vertexConsumer, 0.625f, getHeight(), 0.687f, 1, UV_NY, 0, 0, 1, i);
+        this.vertex(affine, normal, vertexConsumer, 0.625f, height, 0.687f, 1, UV_NY, 0, 0, 1, i);
 
         // western face
-        this.vertex(affine, normal, vertexConsumer, 0.375f, getHeight(), 0.312f, 0, UV_NY, -1, 0, 0, i);
+        this.vertex(affine, normal, vertexConsumer, 0.375f, height, 0.312f, 0, UV_NY, -1, 0, 0, i);
         this.vertex(affine, normal, vertexConsumer, 0.375f, 0, 0.312f, 0, UV_PY, -1, 0, 0, i);
         this.vertex(affine, normal, vertexConsumer, 0.375f, 0, 0.687f, 1, UV_PY, -1, 0, 0, i);
-        this.vertex(affine, normal, vertexConsumer, 0.375f, getHeight(), 0.687f, 1, UV_NY, -1, 0, 0, i);
+        this.vertex(affine, normal, vertexConsumer, 0.375f, height, 0.687f, 1, UV_NY, -1, 0, 0, i);
 
         // TODO: bottom face
         poseStack.popPose();

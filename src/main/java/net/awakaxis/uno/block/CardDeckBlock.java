@@ -1,12 +1,15 @@
 package net.awakaxis.uno.block;
 
 import net.awakaxis.uno.UNOBlockEntities;
+import net.awakaxis.uno.UNOItems;
 import net.awakaxis.uno.client.renderer.blockentity.CardDeckRenderer;
+import net.awakaxis.uno.item.UnoCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -25,6 +28,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 public class CardDeckBlock extends BaseEntityBlock {
 
     private static final VoxelShape DEFAULT_COLLISION = box(6, 0, 5, 10, 2, 11);
@@ -36,10 +41,24 @@ public class CardDeckBlock extends BaseEntityBlock {
     @Override
     public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
-            CardDeckRenderer.CARD_COUNT -= 1;
             return InteractionResult.SUCCESS;
+        }
+        CardDeckBlockEntity cardDeck = (CardDeckBlockEntity) level.getBlockEntity(blockPos);
+        if (cardDeck != null) {
+            if (!player.isCrouching()) {
+                cardDeck.decrementCardCount();
+                Random random = new Random();
+                // for debug, to be changed
+                ItemStack card = ((UnoCardItem)UNOItems.UNO_CARD).getWithIndex(random.nextInt(65));
+                if (!player.addItem(card)) {
+                    player.drop(card, false);
+                }
+            } else {
+                cardDeck.resetCardCount();
+            }
+            return InteractionResult.CONSUME;
         } else {
-            return InteractionResult.PASS;
+            return InteractionResult.FAIL;
         }
     }
 

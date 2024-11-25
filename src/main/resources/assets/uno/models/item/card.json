@@ -93,6 +93,30 @@
         "card_index": 14
       },
       "model": "uno:item/card_14"
+    },
+    {
+      "predicate": {
+        "card_index": 15
+      },
+      "model": "uno:item/card_15"
+    },
+    {
+      "predicate": {
+        "card_index": 16
+      },
+      "model": "uno:item/card_16"
+    },
+    {
+      "predicate": {
+        "card_index": 17
+      },
+      "model": "uno:item/card_17"
+    },
+    {
+      "predicate": {
+        "card_index": 18
+      },
+      "model": "uno:item/card_18"
     }
   ]
 }

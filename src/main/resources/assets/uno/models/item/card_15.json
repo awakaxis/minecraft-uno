@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "uno:item/card_2_yellow"
+  }
+}

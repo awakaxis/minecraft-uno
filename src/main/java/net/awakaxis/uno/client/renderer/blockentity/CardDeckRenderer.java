@@ -17,6 +17,7 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
     public static final ResourceLocation CARD_DECK_TEXTURE = UNO.id("textures/entity/card_deck.png");
     public static final ResourceLocation CARD_DECK_TEXTURE_SIDE = UNO.id("textures/entity/card_deck_side.png");
     private static final float CARD_THICKNESS = 0.007f;
+    private static final float CARD_FACTOR = 5.0f;
 
     public CardDeckRenderer(BlockEntityRendererProvider.Context context) {}
 
@@ -24,7 +25,7 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
     public void render(CardDeckBlockEntity blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
         if (blockEntity.getCardCount() <= 0) return;
 
-        float height = CARD_THICKNESS * Math.round(blockEntity.getCardCount() / 10.0f) / 2.0f;
+        float height = CARD_THICKNESS * Math.round(blockEntity.getCardCount() / CARD_FACTOR) / 2.0f;
 
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutout(CARD_DECK_TEXTURE));
         poseStack.pushPose();
@@ -34,6 +35,8 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
 //        poseStack.rotateAround(Axis.YP.rotationDegrees(90), 0.5f, 0, 0.5f);
         Matrix4f affine = poseStack.last().pose();
         Matrix3f normal = poseStack.last().normal();
+
+        //TODO: replace hardcoded vertex coordinates with variables so that implementing blockstates is easier
 
         // top face
         this.vertex(affine, normal, vertexConsumer, 0.375f, height, 0.312f, 0, 0, 0, 1, 0, i);
@@ -45,7 +48,7 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
 
         // round to x, x + 0.5, or x + 1 because the card side texture is actually two cards on top of each other, so the value needs to be in terms of 0.5
         // hawk tuah
-        final float VALUE = Math.round(blockEntity.getCardCount() / 10.0f) / 2.0f;
+        final float VALUE = Math.round(blockEntity.getCardCount() / CARD_FACTOR) / 2.0f;
         final float UV_NY = (int) VALUE < VALUE ? 0.5f : 0.0F;
         final float UV_PY = (int) VALUE < VALUE ? VALUE + 0.5f : VALUE;
 
@@ -86,9 +89,4 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
                 .normal(matrix3f, (float)l, (float)m, (float)n)
                 .endVertex();
     }
-
-//    @Override
-//    public boolean shouldRender(CardDeckBlockEntity blockEntity, Vec3 vec3) {
-//        return true;
-//    }
 }

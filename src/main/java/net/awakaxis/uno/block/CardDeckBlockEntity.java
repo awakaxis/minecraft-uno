@@ -39,7 +39,6 @@ public class CardDeckBlockEntity extends BlockEntity {
             this.cardCount--;
             this.setChanged();
         }
-//        UNO.LOGGER.info("set cardCount to{}", cardCount);
     }
 
     public void resetCardCount() {

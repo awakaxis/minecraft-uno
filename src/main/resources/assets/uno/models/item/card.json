@@ -213,6 +213,30 @@
         "card_index": 34
       },
       "model": "uno:item/card_34"
+    },
+    {
+      "predicate": {
+        "card_index": 35
+      },
+      "model": "uno:item/card_35"
+    },
+    {
+      "predicate": {
+        "card_index": 36
+      },
+      "model": "uno:item/card_36"
+    },
+    {
+      "predicate": {
+        "card_index": 37
+      },
+      "model": "uno:item/card_37"
+    },
+    {
+      "predicate": {
+        "card_index": 38
+      },
+      "model": "uno:item/card_38"
     }
   ]
 }

@@ -237,6 +237,30 @@
         "card_index": 38
       },
       "model": "uno:item/card_38"
+    },
+    {
+      "predicate": {
+        "card_index": 39
+      },
+      "model": "uno:item/card_39"
+    },
+    {
+      "predicate": {
+        "card_index": 40
+      },
+      "model": "uno:item/card_40"
+    },
+    {
+      "predicate": {
+        "card_index": 41
+      },
+      "model": "uno:item/card_41"
+    },
+    {
+      "predicate": {
+        "card_index": 42
+      },
+      "model": "uno:item/card_42"
     }
   ]
 }

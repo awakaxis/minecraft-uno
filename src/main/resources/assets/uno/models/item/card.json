@@ -261,6 +261,126 @@
         "card_index": 42
       },
       "model": "uno:item/card_42"
+    },
+    {
+      "predicate": {
+        "card_index": 43
+      },
+      "model": "uno:item/card_43"
+    },
+    {
+      "predicate": {
+        "card_index": 44
+      },
+      "model": "uno:item/card_44"
+    },
+    {
+      "predicate": {
+        "card_index": 45
+      },
+      "model": "uno:item/card_45"
+    },
+    {
+      "predicate": {
+        "card_index": 46
+      },
+      "model": "uno:item/card_46"
+    },
+    {
+      "predicate": {
+        "card_index": 47
+      },
+      "model": "uno:item/card_47"
+    },
+    {
+      "predicate": {
+        "card_index": 48
+      },
+      "model": "uno:item/card_48"
+    },
+    {
+      "predicate": {
+        "card_index": 49
+      },
+      "model": "uno:item/card_49"
+    },
+    {
+      "predicate": {
+        "card_index": 50
+      },
+      "model": "uno:item/card_50"
+    },
+    {
+      "predicate": {
+        "card_index": 51
+      },
+      "model": "uno:item/card_51"
+    },
+    {
+      "predicate": {
+        "card_index": 52
+      },
+      "model": "uno:item/card_52"
+    },
+    {
+      "predicate": {
+        "card_index": 53
+      },
+      "model": "uno:item/card_53"
+    },
+    {
+      "predicate": {
+        "card_index": 54
+      },
+      "model": "uno:item/card_54"
+    },
+    {
+      "predicate": {
+        "card_index": 55
+      },
+      "model": "uno:item/card_55"
+    },
+    {
+      "predicate": {
+        "card_index": 56
+      },
+      "model": "uno:item/card_56"
+    },
+    {
+      "predicate": {
+        "card_index": 57
+      },
+      "model": "uno:item/card_57"
+    },
+    {
+      "predicate": {
+        "card_index": 58
+      },
+      "model": "uno:item/card_58"
+    },
+    {
+      "predicate": {
+        "card_index": 59
+      },
+      "model": "uno:item/card_59"
+    },
+    {
+      "predicate": {
+        "card_index": 60
+      },
+      "model": "uno:item/card_60"
+    },
+    {
+      "predicate": {
+        "card_index": 61
+      },
+      "model": "uno:item/card_61"
+    },
+    {
+      "predicate": {
+        "card_index": 62
+      },
+      "model": "uno:item/card_62"
     }
   ]
 }

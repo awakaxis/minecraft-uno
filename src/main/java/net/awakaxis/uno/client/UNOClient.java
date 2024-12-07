@@ -2,10 +2,13 @@ package net.awakaxis.uno.client;
 
 import net.awakaxis.uno.UNO;
 import net.awakaxis.uno.UNOBlockEntities;
+import net.awakaxis.uno.UNOEntities;
 import net.awakaxis.uno.UNOItems;
 import net.awakaxis.uno.client.renderer.blockentity.CardDeckRenderer;
+import net.awakaxis.uno.client.renderer.entity.PlayingDeckRenderer;
 import net.awakaxis.uno.item.UnoCardItem;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -20,6 +23,7 @@ public class UNOClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockEntityRenderers.register(UNOBlockEntities.CARD_DECK_BLOCK_ENTITY_TYPE, CardDeckRenderer::new);
+        EntityRendererRegistry.register(UNOEntities.PLAYING_DECK_ENTITY_TYPE, PlayingDeckRenderer::new);
 
         // fuck you, *unclamps your ClampedItemPropertyFunction*
         ClampedItemPropertyFunction function = new ClampedItemPropertyFunction() {

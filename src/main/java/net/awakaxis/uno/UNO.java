@@ -21,6 +21,7 @@ public class UNO implements ModInitializer {
 		UNOBlocks.register();
 		UNOBlockEntities.register();
 		UNOItems.register();
+		UNOEntities.register();
 
 		ItemGroupEvents.modifyEntriesEvent(UNOItems.UNO_ITEM_GROUP_KEY).register(itemGroup -> {
 			itemGroup.accept(UNOBlocks.CARD_DECK.asItem());

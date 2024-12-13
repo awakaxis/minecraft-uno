@@ -10,11 +10,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PlayingDeck extends Entity {
 
@@ -23,22 +23,25 @@ public class PlayingDeck extends Entity {
 
     public PlayingDeck(EntityType<?> entityType, Level level) {
         super(entityType, level);
+
     }
 
-    @Environment(EnvType.SERVER)
     public void pushCard(int cardIndex) {
         if (this.level().isClientSide) return;
 
+        UNO.LOGGER.info("pushing card");
+
         CompoundTag deckContents = this.entityData.get(DECK_CONTENTS_ID);
         ListTag cardStack = deckContents.getList(DECK_STACK_TAG, Tag.TAG_INT);
-        cardStack.set(cardStack.size(), IntTag.valueOf(cardIndex));
+        cardStack.add(IntTag.valueOf(cardIndex));
 
-        this.entityData.set(DECK_CONTENTS_ID, deckContents);
+        this.entityData.set(DECK_CONTENTS_ID, deckContents, true);
     }
 
-    @Environment(EnvType.SERVER)
     public void popCard() {
         if (this.level().isClientSide) return;
+
+        UNO.LOGGER.info("popping card");
 
         CompoundTag deckContents = this.entityData.get(DECK_CONTENTS_ID);
         ListTag cardStack = deckContents.getList(DECK_STACK_TAG, Tag.TAG_INT);
@@ -51,10 +54,9 @@ public class PlayingDeck extends Entity {
 
     @Override
     public @NotNull InteractionResult interact(Player player, InteractionHand interactionHand) {
-        UNO.LOGGER.info("Testing");
         if (this.level().isClientSide) {
             player.displayClientMessage(Component.nullToEmpty("CLIENT: tag is: " + this.entityData.get(DECK_CONTENTS_ID)), false);
-            return InteractionResult.SUCCESS;
+            return InteractionResult.CONSUME;
         } else {
             this.pushCard(18);
             player.displayClientMessage(Component.nullToEmpty("SERVER: tag is: " + this.entityData.get(DECK_CONTENTS_ID)), false);
@@ -62,6 +64,10 @@ public class PlayingDeck extends Entity {
         }
     }
 
+    @Override
+    public boolean isPickable() {
+        return true;
+    }
 
     @Override
     public void defineSynchedData() {
@@ -69,8 +75,14 @@ public class PlayingDeck extends Entity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compoundTag) {}
+    public void readAdditionalSaveData(CompoundTag compoundTag) {
+        CompoundTag compoundTag2 = new CompoundTag();
+        compoundTag2.put(DECK_STACK_TAG, compoundTag.getList(DECK_STACK_TAG, Tag.TAG_INT));
+        this.entityData.set(DECK_CONTENTS_ID, compoundTag2);
+    }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compoundTag) {}
+    public void addAdditionalSaveData(CompoundTag compoundTag) {
+        compoundTag.put(DECK_STACK_TAG, this.entityData.get(DECK_CONTENTS_ID).getList(DECK_STACK_TAG, Tag.TAG_INT));
+    }
 }

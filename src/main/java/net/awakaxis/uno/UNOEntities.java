@@ -13,7 +13,7 @@ public class UNOEntities {
     public static final EntityType<PlayingDeck> PLAYING_DECK_ENTITY_TYPE = FabricEntityTypeBuilder.create(MobCategory.MISC, PlayingDeck::new).dimensions(EntityDimensions.fixed(0.5f, 0.5f)).build();
 
     public static void register() {
-        Registry.register(BuiltInRegistries.ENTITY_TYPE, "deck", PLAYING_DECK_ENTITY_TYPE);
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, UNO.id("deck"), PLAYING_DECK_ENTITY_TYPE);
         UNO.LOGGER.info("Registered Entity Types");
     }
 }

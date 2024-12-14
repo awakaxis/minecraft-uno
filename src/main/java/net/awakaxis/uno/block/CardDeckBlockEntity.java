@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 public class CardDeckBlockEntity extends BlockEntity {
 
     public static final String CARD_COUNT_TAG = "cardCount";
+    public static final String CARD_SEED_TAG = "cardSeed";
 
     private int cardCount = 112;
 

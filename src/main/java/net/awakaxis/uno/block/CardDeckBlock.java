@@ -6,6 +6,7 @@ import net.awakaxis.uno.client.renderer.blockentity.CardDeckRenderer;
 import net.awakaxis.uno.item.UnoCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -47,9 +48,8 @@ public class CardDeckBlock extends BaseEntityBlock {
         if (cardDeck != null) {
             if (!player.isCrouching()) {
                 cardDeck.decrementCardCount();
-                Random random = new Random();
-                // for debug, to be changed
-                ItemStack card = ((UnoCardItem)UNOItems.UNO_CARD).getWithIndex(random.nextInt(65));
+                RandomSource randomSource = RandomSource.create();
+                ItemStack card = ((UnoCardItem)UNOItems.UNO_CARD).getWithIndex(randomSource.nextInt(9, 62));
                 if (!player.addItem(card)) {
                     player.drop(card, false);
                 }

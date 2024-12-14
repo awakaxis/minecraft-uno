@@ -10,7 +10,7 @@ import net.minecraft.world.entity.MobCategory;
 
 public class UNOEntities {
 
-    public static final EntityType<PlayingDeck> PLAYING_DECK_ENTITY_TYPE = FabricEntityTypeBuilder.create(MobCategory.MISC, PlayingDeck::new).dimensions(EntityDimensions.fixed(0.5f, 0.5f)).build();
+    public static final EntityType<PlayingDeck> PLAYING_DECK_ENTITY_TYPE = FabricEntityTypeBuilder.create(MobCategory.MISC, PlayingDeck::new).dimensions(EntityDimensions.fixed(0.35f, 0.35f)).build();
 
     public static void register() {
         Registry.register(BuiltInRegistries.ENTITY_TYPE, UNO.id("deck"), PLAYING_DECK_ENTITY_TYPE);

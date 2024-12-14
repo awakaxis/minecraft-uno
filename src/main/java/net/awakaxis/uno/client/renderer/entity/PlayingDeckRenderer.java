@@ -11,6 +11,10 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -28,23 +32,48 @@ public class PlayingDeckRenderer extends EntityRenderer<PlayingDeck> {
     @Override
     public void render(PlayingDeck playingDeck, float f, float g, PoseStack matrices, MultiBufferSource multiBufferSource, int i) {
 
+        if (playingDeck.getEntityData().get(PlayingDeck.DECK_CONTENTS_ID).isEmpty()) return;
+
         RandomSource randomSource = RandomSource.create(playingDeck.getEntityData().get(PlayingDeck.CARD_PLACEMENT_SEED));
 
-        ItemStack itemStack = ((UnoCardItem) UNOItems.UNO_CARD).getWithIndex(18);
-
+        // push for basic transforms (making the card properly sized and also lying on the ground flat)
         matrices.pushPose();
+
         Matrix4f affine = matrices.last().pose();
 
         // transform affine matrix with rotation to make the card flat, and scale to make the card look not massive
         affine.translate(0f, 0f, 0.05f);
         affine.rotate(Axis.XP.rotationDegrees(90f));
-        affine.rotate(Axis.ZN.rotationDegrees((randomSource.nextFloat() * 90f) - 45f));
-        affine.scale(0.5f, 0.5f, 0.5f);
+        affine.scale(.4f, .4f, 0.05f);
 
-        this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, i, OverlayTexture.NO_OVERLAY, matrices, multiBufferSource, playingDeck.level(), playingDeck.getId());
+        CompoundTag deckData = playingDeck.getEntityData().get(PlayingDeck.DECK_CONTENTS_ID);
+        ListTag cards = deckData.getList(PlayingDeck.DECK_STACK_TAG, Tag.TAG_INT);
+        ListTag cardRots = deckData.getList(PlayingDeck.DECK_ROTS_TAG, Tag.TAG_INT);
+
+        for (int j = 0; j < cards.size(); j ++) {
+            // push for card specifics (slight rotation, height in deck)
+            matrices.pushPose();
+
+            int k = ((IntTag)cards.get(j)).getAsInt();
+            ItemStack itemStack = ((UnoCardItem) UNOItems.UNO_CARD).getWithIndex(k);
+            Matrix4f affine2 = matrices.last().pose();
+
+            affine2.rotate(Axis.ZP.rotationDegrees(((IntTag)cardRots.get(j)).getAsInt()));
+            affine2.rotate(Axis.ZP.rotationDegrees((randomSource.nextFloat() * 30f) - 15f));
+            affine2.translate(0, 0, -j * 0.06f);
+
+            this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, i, OverlayTexture.NO_OVERLAY, matrices, multiBufferSource, playingDeck.level(), playingDeck.getId());
+
+            matrices.popPose();
+        }
 
         matrices.popPose();
     }
+
+//    @Override
+//    public boolean shouldRender(PlayingDeck entity, Frustum frustum, double d, double e, double f) {
+//        return true;
+//    }
 
     @Override
     public ResourceLocation getTextureLocation(PlayingDeck entity) {

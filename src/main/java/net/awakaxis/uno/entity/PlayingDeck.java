@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -18,7 +19,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayingDeck extends Entity {
 
-    private static final EntityDataAccessor<CompoundTag> DECK_CONTENTS_ID = SynchedEntityData.defineId(PlayingDeck.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final RandomSource RANDOM = RandomSource.create();
+    public static final EntityDataAccessor<CompoundTag> DECK_CONTENTS_ID = SynchedEntityData.defineId(PlayingDeck.class, EntityDataSerializers.COMPOUND_TAG);
+    public static final EntityDataAccessor<Long> CARD_PLACEMENT_SEED = SynchedEntityData.defineId(PlayingDeck.class, EntityDataSerializers.LONG);
     public static final String DECK_STACK_TAG = "cardStack";
 
     public PlayingDeck(EntityType<?> entityType, Level level) {
@@ -72,6 +75,7 @@ public class PlayingDeck extends Entity {
     @Override
     public void defineSynchedData() {
         this.entityData.define(DECK_CONTENTS_ID, new CompoundTag());
+        this.entityData.define(CARD_PLACEMENT_SEED, RANDOM.nextLong());
     }
 
     @Override

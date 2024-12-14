@@ -58,12 +58,16 @@ public class PlayingDeck extends Entity {
     @Override
     public @NotNull InteractionResult interact(Player player, InteractionHand interactionHand) {
         if (this.level().isClientSide) {
-            player.displayClientMessage(Component.nullToEmpty("CLIENT: tag is: " + this.entityData.get(DECK_CONTENTS_ID)), false);
-            return InteractionResult.CONSUME;
+            return InteractionResult.sidedSuccess(!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty());
         } else {
-            this.pushCard(18);
-            player.displayClientMessage(Component.nullToEmpty("SERVER: tag is: " + this.entityData.get(DECK_CONTENTS_ID)), false);
-            return InteractionResult.SUCCESS;
+            ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
+
+            if (itemStack.isEmpty() || !itemStack.is(UNOItems.UNO_CARD)) return InteractionResult.SUCCESS;
+
+            this.pushCard(player, itemStack.getOrCreateTag().getInt(UnoCardItem.CARD_INDEX_TAG));
+            itemStack.shrink(1);
+
+            return InteractionResult.CONSUME;
         }
     }
 

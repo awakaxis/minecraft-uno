@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class PlayingDeckRenderer extends EntityRenderer<PlayingDeck> {
@@ -40,10 +41,12 @@ public class PlayingDeckRenderer extends EntityRenderer<PlayingDeck> {
         matrices.pushPose();
 
         Matrix4f affine = matrices.last().pose();
+        Matrix3f normal = matrices.last().normal();
 
         // transform affine matrix with rotation to make the card flat, and scale to make the card look not massive
         affine.translate(0f, 0f, 0.05f);
         affine.rotate(Axis.XP.rotationDegrees(90f));
+        normal.rotate(Axis.XP.rotationDegrees(90f));
         affine.scale(.4f, .4f, 0.05f);
 
         CompoundTag deckData = playingDeck.getEntityData().get(PlayingDeck.DECK_CONTENTS_ID);
@@ -57,9 +60,15 @@ public class PlayingDeckRenderer extends EntityRenderer<PlayingDeck> {
             int k = ((IntTag)cards.get(j)).getAsInt();
             ItemStack itemStack = ((UnoCardItem) UNOItems.UNO_CARD).getWithIndex(k);
             Matrix4f affine2 = matrices.last().pose();
+            Matrix3f normal2 = matrices.last().normal();
 
-            affine2.rotate(Axis.ZP.rotationDegrees(((IntTag)cardRots.get(j)).getAsInt()));
-            affine2.rotate(Axis.ZP.rotationDegrees((randomSource.nextFloat() * 30f) - 15f));
+            float cardRot = ((IntTag)cardRots.get(j)).getAsInt();
+            float modifier = (randomSource.nextFloat() * 30f) - 15f;
+            affine2.rotate(Axis.ZP.rotationDegrees(cardRot));
+            affine2.rotate(Axis.ZP.rotationDegrees(modifier));
+            normal2.rotate(Axis.ZP.rotationDegrees(cardRot));
+            normal2.rotate(Axis.ZP.rotationDegrees(modifier));
+
             affine2.translate(0, 0, -j * 0.06f);
 
             this.itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, i, OverlayTexture.NO_OVERLAY, matrices, multiBufferSource, playingDeck.level(), playingDeck.getId());

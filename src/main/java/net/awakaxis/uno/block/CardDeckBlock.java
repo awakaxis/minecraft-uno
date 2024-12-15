@@ -3,6 +3,7 @@ package net.awakaxis.uno.block;
 import net.awakaxis.uno.UNOBlockEntities;
 import net.awakaxis.uno.UNOItems;
 import net.awakaxis.uno.client.renderer.blockentity.CardDeckRenderer;
+import net.awakaxis.uno.item.CardDeckBlockItem;
 import net.awakaxis.uno.item.UnoCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,6 +11,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -33,11 +35,10 @@ import java.util.Random;
 
 public class CardDeckBlock extends BaseEntityBlock {
 
+    // TODO todo here cause i nearly forgot i still need to do blockstates
     private static final VoxelShape DEFAULT_COLLISION = box(6, 0, 5, 10, 2, 11);
 
-    public CardDeckBlock(BlockBehaviour.Properties properties) {
-        super(properties);
-    }
+    public CardDeckBlock(BlockBehaviour.Properties properties) {super(properties);}
 
     @Override
     public @NotNull InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
@@ -92,5 +93,10 @@ public class CardDeckBlock extends BaseEntityBlock {
     @Override
     public @NotNull RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
+    public Item asItem() {
+        return UNOItems.CARD_DECK_BLOCK_ITEM;
     }
 }

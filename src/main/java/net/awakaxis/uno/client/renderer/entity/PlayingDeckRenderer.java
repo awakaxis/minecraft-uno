@@ -6,7 +6,6 @@ import net.awakaxis.uno.UNOItems;
 import net.awakaxis.uno.entity.PlayingDeck;
 import net.awakaxis.uno.item.UnoCardItem;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;

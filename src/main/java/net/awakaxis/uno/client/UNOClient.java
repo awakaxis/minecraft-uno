@@ -1,6 +1,5 @@
 package net.awakaxis.uno.client;
 
-import net.awakaxis.uno.UNO;
 import net.awakaxis.uno.UNOBlockEntities;
 import net.awakaxis.uno.UNOEntities;
 import net.awakaxis.uno.UNOItems;

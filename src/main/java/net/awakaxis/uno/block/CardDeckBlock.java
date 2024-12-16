@@ -2,8 +2,6 @@ package net.awakaxis.uno.block;
 
 import net.awakaxis.uno.UNOBlockEntities;
 import net.awakaxis.uno.UNOItems;
-import net.awakaxis.uno.client.renderer.blockentity.CardDeckRenderer;
-import net.awakaxis.uno.item.CardDeckBlockItem;
 import net.awakaxis.uno.item.UnoCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,8 +28,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 public class CardDeckBlock extends BaseEntityBlock {
 

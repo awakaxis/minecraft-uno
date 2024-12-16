@@ -3,7 +3,6 @@ package net.awakaxis.uno;
 import net.awakaxis.uno.item.CardDeckBlockItem;
 import net.awakaxis.uno.item.UnoCardItem;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;

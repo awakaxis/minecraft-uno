@@ -1,6 +1,5 @@
 package net.awakaxis.uno.block;
 
-import net.awakaxis.uno.UNO;
 import net.awakaxis.uno.UNOBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

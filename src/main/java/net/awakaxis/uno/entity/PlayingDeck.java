@@ -150,6 +150,13 @@ public class PlayingDeck extends Entity {
     }
 
     @Override
+    public @Nullable ItemStack getPickResult() {
+        CompoundTag deckContents = this.entityData.get(DECK_CONTENTS_ID);
+        ListTag cardStack = deckContents.getList(CARD_STACK_TAG, Tag.TAG_INT);
+        return ((UnoCardItem)UNOItems.UNO_CARD).getWithIndex(((IntTag)cardStack.get(cardStack.size() - 1)).getAsInt());
+    }
+
+    @Override
     public void defineSynchedData() {
         this.entityData.define(DECK_CONTENTS_ID, new CompoundTag());
         this.entityData.define(CARD_PLACEMENT_SEED, RandomSource.create().nextLong());

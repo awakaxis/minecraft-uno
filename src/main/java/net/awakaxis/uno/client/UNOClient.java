@@ -8,6 +8,7 @@ import net.awakaxis.uno.client.renderer.entity.PlayingDeckRenderer;
 import net.awakaxis.uno.item.UnoCardItem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -28,6 +29,9 @@ public class UNOClient implements ClientModInitializer {
         ClampedItemPropertyFunction function = new ClampedItemPropertyFunction() {
             @Override
             public float call(ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity, int i) {
+                if (livingEntity != null && !livingEntity.equals(Minecraft.getInstance().player)) {
+                    return 0;
+                }
                 return itemStack.getOrCreateTag().getInt(UnoCardItem.CARD_INDEX_TAG);
             }
 

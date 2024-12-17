@@ -90,9 +90,4 @@ public class CardDeckBlock extends BaseEntityBlock {
     public @NotNull RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
-
-    @Override
-    public Item asItem() {
-        return UNOItems.CARD_DECK_BLOCK_ITEM;
-    }
 }

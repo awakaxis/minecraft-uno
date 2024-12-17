@@ -5,7 +5,6 @@ import net.awakaxis.uno.entity.PlayingDeck;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -15,13 +14,14 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class UnoCardItem extends Item {
 
     public static final String CARD_INDEX_TAG = "cardIndex";
 
     @Override
-    public ItemStack getDefaultInstance() {
+    public @NotNull ItemStack getDefaultInstance() {
         ItemStack itemStack = super.getDefaultInstance();
         itemStack.getOrCreateTag().putInt(CARD_INDEX_TAG, 0);
         return itemStack;
@@ -34,13 +34,13 @@ public class UnoCardItem extends Item {
     }
 
     @Override
-    public String getDescriptionId(ItemStack itemStack) {
+    public @NotNull String getDescriptionId(ItemStack itemStack) {
         int i = itemStack.getOrCreateTag().getInt(CARD_INDEX_TAG);
         return super.getDescriptionId() + "." + i;
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext useOnContext) {
+    public @NotNull InteractionResult useOn(UseOnContext useOnContext) {
         Level level = useOnContext.getLevel();
         if (!(level instanceof ServerLevel serverLevel)) {
             return InteractionResult.SUCCESS;

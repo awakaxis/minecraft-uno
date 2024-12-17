@@ -49,8 +49,8 @@ public class PlayingDeckRenderer extends EntityRenderer<PlayingDeck> {
         affine.scale(.4f, .4f, 0.05f);
 
         CompoundTag deckData = playingDeck.getEntityData().get(PlayingDeck.DECK_CONTENTS_ID);
-        ListTag cards = deckData.getList(PlayingDeck.DECK_STACK_TAG, Tag.TAG_INT);
-        ListTag cardRots = deckData.getList(PlayingDeck.DECK_ROTS_TAG, Tag.TAG_INT);
+        ListTag cards = deckData.getList(PlayingDeck.CARD_STACK_TAG, Tag.TAG_INT);
+        ListTag cardRots = deckData.getList(PlayingDeck.CARD_ROTS_TAG, Tag.TAG_INT);
 
         for (int j = 0; j < cards.size(); j ++) {
             // push for card specifics (slight rotation, height in deck)
@@ -77,11 +77,6 @@ public class PlayingDeckRenderer extends EntityRenderer<PlayingDeck> {
 
         matrices.popPose();
     }
-
-//    @Override
-//    public boolean shouldRender(PlayingDeck entity, Frustum frustum, double d, double e, double f) {
-//        return true;
-//    }
 
     @Override
     public ResourceLocation getTextureLocation(PlayingDeck entity) {

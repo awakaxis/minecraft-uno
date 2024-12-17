@@ -18,11 +18,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class PlayingDeck extends Entity {
 
-    private static final RandomSource RANDOM = RandomSource.create();
     public static final EntityDataAccessor<CompoundTag> DECK_CONTENTS_ID = SynchedEntityData.defineId(PlayingDeck.class, EntityDataSerializers.COMPOUND_TAG);
     public static final EntityDataAccessor<Long> CARD_PLACEMENT_SEED = SynchedEntityData.defineId(PlayingDeck.class, EntityDataSerializers.LONG);
-    public static final String DECK_ROTS_TAG = "cardRotations";
-    public static final String DECK_STACK_TAG = "cardStack";
+    public static final String CARD_ROTS_TAG = "cardRotations";
+    public static final String CARD_STACK_TAG = "cardStack";
 
     public PlayingDeck(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -35,8 +34,8 @@ public class PlayingDeck extends Entity {
         }
 
         CompoundTag deckContents = this.entityData.get(DECK_CONTENTS_ID);
-        ListTag cardStack = deckContents.getList(DECK_STACK_TAG, Tag.TAG_INT);
-        ListTag cardRots = deckContents.getList(DECK_ROTS_TAG, Tag.TAG_INT);
+        ListTag cardStack = deckContents.getList(CARD_STACK_TAG, Tag.TAG_INT);
+        ListTag cardRots = deckContents.getList(CARD_ROTS_TAG, Tag.TAG_INT);
 
         cardStack.add(IntTag.valueOf(cardIndex));
         cardRots.add(IntTag.valueOf((int) player.getYRot()));
@@ -48,8 +47,8 @@ public class PlayingDeck extends Entity {
         if (this.level().isClientSide) return;
 
         CompoundTag deckContents = this.entityData.get(DECK_CONTENTS_ID);
-        ListTag cardStack = deckContents.getList(DECK_STACK_TAG, Tag.TAG_INT);
-        ListTag cardRots = deckContents.getList(DECK_ROTS_TAG, Tag.TAG_INT);
+        ListTag cardStack = deckContents.getList(CARD_STACK_TAG, Tag.TAG_INT);
+        ListTag cardRots = deckContents.getList(CARD_ROTS_TAG, Tag.TAG_INT);
         if (cardStack.isEmpty() || cardRots.isEmpty()) {
             if (!(cardStack.isEmpty() && cardRots.isEmpty())) {
                 UNO.LOGGER.warn("Desync in cardStack and cardRots");
@@ -79,10 +78,16 @@ public class PlayingDeck extends Entity {
         }
     }
 
-//    @Override
-//    public boolean shouldRender(double d, double e, double f) {
-//        return true;
-//    }
+    @Override
+    public void tick() {
+        super.tick();
+
+        CompoundTag deckContents = this.entityData.get(DECK_CONTENTS_ID);
+        ListTag cardStack = deckContents.getList(CARD_STACK_TAG, Tag.TAG_INT);
+        if (cardStack.isEmpty()) {
+            this.discard();
+        }
+    }
 
     @Override
     public boolean isPickable() {
@@ -92,21 +97,21 @@ public class PlayingDeck extends Entity {
     @Override
     public void defineSynchedData() {
         this.entityData.define(DECK_CONTENTS_ID, new CompoundTag());
-        this.entityData.define(CARD_PLACEMENT_SEED, RANDOM.nextLong());
+        this.entityData.define(CARD_PLACEMENT_SEED, RandomSource.create().nextLong());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         CompoundTag compoundTag2 = new CompoundTag();
-        compoundTag2.put(DECK_STACK_TAG, compoundTag.getList(DECK_STACK_TAG, Tag.TAG_INT));
-        compoundTag2.put(DECK_ROTS_TAG, compoundTag.getList(DECK_ROTS_TAG, Tag.TAG_INT));
+        compoundTag2.put(CARD_STACK_TAG, compoundTag.getList(CARD_STACK_TAG, Tag.TAG_INT));
+        compoundTag2.put(CARD_ROTS_TAG, compoundTag.getList(CARD_ROTS_TAG, Tag.TAG_INT));
         this.entityData.set(DECK_CONTENTS_ID, compoundTag2);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         CompoundTag deckData = this.entityData.get(DECK_CONTENTS_ID);
-        compoundTag.put(DECK_STACK_TAG, deckData.getList(DECK_STACK_TAG, Tag.TAG_INT));
-        compoundTag.put(DECK_ROTS_TAG, deckData.getList(DECK_ROTS_TAG, Tag.TAG_INT));
+        compoundTag.put(CARD_STACK_TAG, deckData.getList(CARD_STACK_TAG, Tag.TAG_INT));
+        compoundTag.put(CARD_ROTS_TAG, deckData.getList(CARD_ROTS_TAG, Tag.TAG_INT));
     }
 }

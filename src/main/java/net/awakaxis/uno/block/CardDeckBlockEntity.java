@@ -34,18 +34,6 @@ public class CardDeckBlockEntity extends BlockEntity {
         return this.cardCount;
     }
 
-    public void decrementCardCount() {
-        if (cardCount > 0) {
-            this.cardCount--;
-            this.setChanged();
-        }
-    }
-
-    public void resetCardCount() {
-        this.cardCount = 112;
-        this.setChanged();
-    }
-
     @Override
     public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);

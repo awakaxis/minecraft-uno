@@ -25,7 +25,7 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
     public void render(CardDeckBlockEntity blockEntity, float f, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j) {
         if (blockEntity.getCardCount() <= 0) return;
 
-        float height = CARD_THICKNESS * Math.round(blockEntity.getCardCount() / CARD_FACTOR) / 2.0f;
+        float height = CARD_THICKNESS * Math.max(Math.round((blockEntity.getCardCount() / CARD_FACTOR)) / 2.0f, 0.5f);
 
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutout(CARD_DECK_TEXTURE));
         poseStack.pushPose();
@@ -48,7 +48,7 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
 
         // round to x, x + 0.5, or x + 1 because the card side texture is actually two cards on top of each other, so the value needs to be in terms of 0.5
         // hawk tuah
-        final float VALUE = Math.round(blockEntity.getCardCount() / CARD_FACTOR) / 2.0f;
+        final float VALUE = Math.max(Math.round(blockEntity.getCardCount() / CARD_FACTOR) / 2.0f, 0.5f);
         final float UV_NY = (int) VALUE < VALUE ? 0.5f : 0.0F;
         final float UV_PY = (int) VALUE < VALUE ? VALUE + 0.5f : VALUE;
 

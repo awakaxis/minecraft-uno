@@ -10,10 +10,14 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayingDeck extends Entity {
@@ -22,6 +26,8 @@ public class PlayingDeck extends Entity {
     public static final EntityDataAccessor<Long> CARD_PLACEMENT_SEED = SynchedEntityData.defineId(PlayingDeck.class, EntityDataSerializers.LONG);
     public static final String CARD_ROTS_TAG = "cardRotations";
     public static final String CARD_STACK_TAG = "cardStack";
+
+    private long lastHit;
 
     public PlayingDeck(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -76,6 +82,43 @@ public class PlayingDeck extends Entity {
 
             return InteractionResult.CONSUME;
         }
+    }
+
+    @Override
+    public boolean hurt(DamageSource damageSource, float f) {
+        boolean bl = damageSource.getDirectEntity() instanceof AbstractArrow;
+        if (damageSource.getEntity() instanceof Player player && !player.getAbilities().mayBuild) {
+            return false;
+        }
+        if (damageSource.isCreativePlayer()) {
+            this.kill();
+            return true;
+        } else {
+            long l = this.level().getGameTime();
+            if (l - this.lastHit > 5L && !bl) {
+                this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+                this.lastHit = l;
+            } else {
+                this.kill();
+            }
+            return true;
+        }
+
+    }
+
+    @Override
+    public void kill() {
+        if (!this.level().isClientSide) {
+            CompoundTag deckContents = this.entityData.get(DECK_CONTENTS_ID);
+            ListTag cardStack = deckContents.getList(CARD_STACK_TAG, Tag.TAG_INT);
+            cardStack.forEach(tag -> {
+                IntTag intTag = (IntTag) tag;
+                ItemEntity itemEntity = new ItemEntity(this.level(), (double) this.blockPosition().getX() + 0.5, (double) this.blockPosition().getY() + 0.5, (double) this.blockPosition().getZ() + 0.5, ((UnoCardItem)UNOItems.UNO_CARD).getWithIndex(intTag.getAsInt()));
+                itemEntity.setDefaultPickUpDelay();
+                this.level().addFreshEntity(itemEntity);
+            });
+        }
+        super.kill();
     }
 
     @Override

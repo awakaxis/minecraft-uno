@@ -5,6 +5,7 @@ import net.awakaxis.uno.entity.PlayingDeck;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -42,7 +43,7 @@ public class UnoCardItem extends Item {
     public InteractionResult useOn(UseOnContext useOnContext) {
         Level level = useOnContext.getLevel();
         if (!(level instanceof ServerLevel serverLevel)) {
-            return InteractionResult.PASS;
+            return InteractionResult.SUCCESS;
         } else {
             BlockPos hitPos = useOnContext.getClickedPos();
             BlockState state = serverLevel.getBlockState(hitPos);
@@ -60,7 +61,7 @@ public class UnoCardItem extends Item {
             PlayingDeck playingDeck = (PlayingDeck) EntityType.create(compoundTag, serverLevel).orElseThrow();
             playingDeck.moveTo(hitLocation);
             playingDeck.pushCard(useOnContext.getPlayer(), itemStack.getOrCreateTag().getInt(CARD_INDEX_TAG));
-            serverLevel.addFreshEntityWithPassengers(playingDeck);
+            serverLevel.addFreshEntity(playingDeck);
 
             itemStack.shrink(1);
 

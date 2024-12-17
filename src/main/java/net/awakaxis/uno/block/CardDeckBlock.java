@@ -31,8 +31,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class CardDeckBlock extends BaseEntityBlock {
 
-    // TODO todo here cause i nearly forgot i still need to do blockstates
-    private static final VoxelShape DEFAULT_COLLISION = box(6, 0, 5, 10, 2, 11);
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+
+    private static final VoxelShape NORTH_AABB = box(6, 0, 5, 10, 2, 11);
+    private static final VoxelShape WEST_AABB = box(5, 0, 6, 11, 2, 10);
 
     public CardDeckBlock(BlockBehaviour.Properties properties) {super(properties);}
 
@@ -60,6 +62,21 @@ public class CardDeckBlock extends BaseEntityBlock {
     }
 
     @Override
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        Direction direction = blockPlaceContext.getHorizontalDirection();
+        return defaultBlockState().setValue(FACING, direction);
+    }
+
+    @Override
+    public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
     @Override
     public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
@@ -70,8 +87,18 @@ public class CardDeckBlock extends BaseEntityBlock {
         }
         super.playerWillDestroy(level, blockPos, blockState, player);
     }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+    }
+
+    @Override
     public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return DEFAULT_COLLISION;
+        return switch (blockState.getValue(FACING)) {
+            case EAST, WEST -> WEST_AABB;
+            default -> NORTH_AABB;
+        };
     }
 
     @Override

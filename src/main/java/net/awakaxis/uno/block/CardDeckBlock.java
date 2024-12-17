@@ -1,28 +1,29 @@
 package net.awakaxis.uno.block;
 
-import net.awakaxis.uno.UNOBlockEntities;
 import net.awakaxis.uno.UNOItems;
 import net.awakaxis.uno.item.UnoCardItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -43,21 +44,33 @@ public class CardDeckBlock extends BaseEntityBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
-        CardDeckBlockEntity cardDeck = (CardDeckBlockEntity) level.getBlockEntity(blockPos);
-        if (cardDeck != null) {
+        BlockEntity blockEntity = level.getBlockEntity(blockPos);
+        if (blockEntity instanceof CardDeckBlockEntity cardDeckBlockEntity) {
             if (!player.isCrouching()) {
-                cardDeck.decrementCardCount();
-                RandomSource randomSource = RandomSource.create();
-                ItemStack card = ((UnoCardItem)UNOItems.UNO_CARD).getWithIndex(randomSource.nextInt(9, 62));
-                if (!player.addItem(card)) {
+                ItemStack itemStack = player.getMainHandItem();
+                if (itemStack.getItem() instanceof UnoCardItem) {
+                    int i = itemStack.getOrCreateTag().getInt(UnoCardItem.CARD_INDEX_TAG);
+                    cardDeckBlockEntity.putCard(i);
+                    itemStack.shrink(1);
+                    return InteractionResult.CONSUME;
+                }
+                if (cardDeckBlockEntity.getCardCount() == 0) {
+                    return InteractionResult.SUCCESS;
+                }
+                ItemStack card = ((UnoCardItem)UNOItems.UNO_CARD).getWithIndex(cardDeckBlockEntity.pullCard());
+                if (!player.getInventory().add(player.getInventory().selected, card)) {
                     player.drop(card, false);
                 }
             } else {
-                cardDeck.resetCardCount();
+                // this is kinda useless until I make it so when you put a card back in the deck it's position in the list is definite (like if you put a red two in and immediately draw another card, you'll get the same red two. idk how to explain it better than that)
+                // probably just gonna do that by storing a number that increments with each added card that represents the number of times a random selection should be skipped in favor of just pulling from the top of the deck directly.
+                // I realise that I could just do this whole thing in a more "realistic" way by shuffling the card list itself and pulling from the top always, but I like being able to make a new deck with a predetermined seed easily like how I can in this current implementation.
+                player.displayClientMessage(Component.nullToEmpty("Shuffled Deck"), true);
+                cardDeckBlockEntity.shuffleDeck();
             }
             return InteractionResult.CONSUME;
         } else {
-            return InteractionResult.FAIL;
+            return InteractionResult.SUCCESS;
         }
     }
 
@@ -75,6 +88,14 @@ public class CardDeckBlock extends BaseEntityBlock {
     @Override
     public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    @Override
+    public void onPlace(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
+        BlockEntity blockEntity = level.getBlockEntity(blockPos);
+        if (blockEntity instanceof CardDeckBlockEntity cardDeckBlockEntity) {
+            cardDeckBlockEntity.populateDeckIfNeeded();
+        }
     }
 
     @Override

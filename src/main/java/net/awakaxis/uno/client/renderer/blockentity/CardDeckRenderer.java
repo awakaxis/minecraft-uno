@@ -2,7 +2,9 @@ package net.awakaxis.uno.client.renderer.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.awakaxis.uno.UNO;
+import net.awakaxis.uno.block.CardDeckBlock;
 import net.awakaxis.uno.block.CardDeckBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -30,9 +32,12 @@ public class CardDeckRenderer implements BlockEntityRenderer<CardDeckBlockEntity
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.entityCutout(CARD_DECK_TEXTURE));
         poseStack.pushPose();
 
-        // TODO: rotate with blockstate
-        // also, translate with blockstate (i wanna make it so you can place the deck on the left or right side of the block face, rather than just the middle)
-//        poseStack.rotateAround(Axis.YP.rotationDegrees(90), 0.5f, 0, 0.5f);
+        // TODO someday: translate with blockstate (i wanna make it so you can place the deck on the left or right side of the block face, rather than just the middle)
+        switch (blockEntity.getBlockState().getValue(CardDeckBlock.FACING)) {
+            case EAST -> poseStack.rotateAround(Axis.YN.rotationDegrees(90f), 0.5f, 0, 0.5f);
+            case SOUTH -> poseStack.rotateAround(Axis.YN.rotationDegrees(180f), 0.5f, 0, 0.5f);
+            case WEST -> poseStack.rotateAround(Axis.YN.rotationDegrees(270f), 0.5f, 0, 0.5f);
+        }
         Matrix4f affine = poseStack.last().pose();
         Matrix3f normal = poseStack.last().normal();
 

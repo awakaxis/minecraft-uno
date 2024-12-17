@@ -32,6 +32,13 @@ public class CardDeckBlockEntity extends BlockEntity {
 
     public int getCardCount() {
         return this.cardCount;
+    public void createAndDropItemStack() {
+        ItemStack itemStack = new ItemStack(this.getBlockState().getBlock());
+        this.saveToItem(itemStack);
+
+        ItemEntity itemEntity = new ItemEntity(this.level, (double) this.getBlockPos().getX() + 0.5, (double) this.getBlockPos().getY() + 0.5, (double) this.getBlockPos().getZ() + 0.5, itemStack);
+        itemEntity.setDefaultPickUpDelay();
+        this.level.addFreshEntity(itemEntity);
     }
 
     @Override

@@ -60,15 +60,30 @@ public class CardDeckBlock extends BaseEntityBlock {
     }
 
     @Override
+    @Override
+    public void playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
+        BlockEntity blockEntity = level.getBlockEntity(blockPos);
+        if (blockEntity instanceof CardDeckBlockEntity cardDeckBlockEntity) {
+            if (!level.isClientSide) {
+                cardDeckBlockEntity.createAndDropItemStack();
+            }
+        }
+        super.playerWillDestroy(level, blockPos, blockState, player);
+    }
     public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         return DEFAULT_COLLISION;
     }
 
     @Override
-    public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
-        return !this.canSurvive(blockState, levelAccessor, blockPos)
-                ? Blocks.AIR.defaultBlockState()
-                : super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+    public @NotNull BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
+        if (!this.canSurvive(blockState, levelAccessor, blockPos)) {
+            BlockEntity blockEntity = levelAccessor.getBlockEntity(blockPos);
+            if (blockEntity instanceof CardDeckBlockEntity cardDeckBlockEntity) {
+                cardDeckBlockEntity.createAndDropItemStack();
+            }
+            return Blocks.AIR.defaultBlockState();
+        }
+        return blockState;
     }
 
     @Override

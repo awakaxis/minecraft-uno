@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PlayingDeck extends Entity {
 
@@ -49,8 +50,8 @@ public class PlayingDeck extends Entity {
         this.entityData.set(DECK_CONTENTS_ID, deckContents, true);
     }
 
-    public void popCard() {
-        if (this.level().isClientSide) return;
+    public int popCard() {
+        if (this.level().isClientSide) return -1;
 
         CompoundTag deckContents = this.entityData.get(DECK_CONTENTS_ID);
         ListTag cardStack = deckContents.getList(CARD_STACK_TAG, Tag.TAG_INT);
@@ -59,13 +60,14 @@ public class PlayingDeck extends Entity {
             if (!(cardStack.isEmpty() && cardRots.isEmpty())) {
                 UNO.LOGGER.warn("Desync in cardStack and cardRots");
             }
-            return;
+            return -1;
         }
 
-        cardStack.remove(cardStack.size() - 1);
+        int i = ((IntTag)cardStack.remove(cardStack.size() - 1)).getAsInt();
         cardRots.remove(cardRots.size() - 1);
 
         this.entityData.set(DECK_CONTENTS_ID, deckContents, true);
+        return i;
     }
 
     @Override
@@ -75,7 +77,17 @@ public class PlayingDeck extends Entity {
         } else {
             ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
-            if (itemStack.isEmpty() || !itemStack.is(UNOItems.UNO_CARD)) return InteractionResult.SUCCESS;
+            if (!itemStack.is(UNOItems.UNO_CARD)) {
+                if (itemStack.isEmpty()) {
+                    int i = popCard();
+                    ItemStack itemStack2 = ((UnoCardItem)UNOItems.UNO_CARD).getWithIndex(i);
+                    if (!player.getInventory().add(player.getInventory().selected, itemStack2)) {
+                        player.drop(itemStack2, false);
+                    }
+                    return InteractionResult.CONSUME;
+                }
+                return InteractionResult.SUCCESS;
+            }
 
             this.pushCard(player, itemStack.getOrCreateTag().getInt(UnoCardItem.CARD_INDEX_TAG));
             itemStack.shrink(1);

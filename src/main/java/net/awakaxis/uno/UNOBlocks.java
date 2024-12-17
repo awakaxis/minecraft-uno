@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class UNOBlocks {
-    public static final Block CARD_DECK = registerWithItem(new CardDeckBlock(BlockBehaviour.Properties.copy(Blocks.STONE)), "card_deck", new Item.Properties().stacksTo(1));
+    public static final Block CARD_DECK = registerWithItem(new CardDeckBlock(BlockBehaviour.Properties.copy(Blocks.BLACK_CARPET)), "card_deck", new Item.Properties().stacksTo(1));
 
     private static Block registerWithItem(Block block, String id, Item.Properties properties) {
         ResourceLocation resourceLocation = UNO.id(id);

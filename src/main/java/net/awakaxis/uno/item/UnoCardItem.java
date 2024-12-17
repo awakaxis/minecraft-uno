@@ -33,6 +33,12 @@ public class UnoCardItem extends Item {
     }
 
     @Override
+    public String getDescriptionId(ItemStack itemStack) {
+        int i = itemStack.getOrCreateTag().getInt(CARD_INDEX_TAG);
+        return super.getDescriptionId() + "." + i;
+    }
+
+    @Override
     public InteractionResult useOn(UseOnContext useOnContext) {
         Level level = useOnContext.getLevel();
         if (!(level instanceof ServerLevel serverLevel)) {
